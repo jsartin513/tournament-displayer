@@ -1,7 +1,8 @@
-import 'react';
+import { NextPage } from 'next';
+import React from 'react';
+import { Game } from '../../types/game';
 
-
-export const Page = async () => {
+const Page: NextPage = async () => {
   const ROUND_ROBIN_SHEET_URL = "https://docs.google.com/spreadsheets/d/1CC5uA0ZrP39eM6OC0JgE8JlwDrqpr4-ykp6kIKtgHXQ/export?format=csv&gid=182568368"
   // const BRACKET_SHEET_URL = "https://docs.google.com/spreadsheets/d/1CC5uA0ZrP39eM6OC0JgE8JlwDrqpr4-ykp6kIKtgHXQ/export?format=csv&gid=2111325620"
 
@@ -15,32 +16,42 @@ export const Page = async () => {
   
 
 
-  function parseCSV(csv: string) {
-    const SHARED_HEADERS = ["Round #", "Start Time"]
+  function parseCSV(csv: string): Game[] {
+    const SHARED_HEADERS = ["Round #", "Start Time"];
+    const sharedHeaderMapping: { [key: string]: string } = {
+      "Round #": "round",
+      "Start Time": "startTime"
+    }
+
     const lines = csv.split("\n");
-    const result = [];
+    const result: Game[] = [];
     const headers = lines[0].split(",");
-    const courtHeaders = headers.filter((header) => !SHARED_HEADERS.includes(header))
-    for (let i = 1; i < lines.length; i+=3) {
-      const game = {};
-      const currentLine = lines[i].split(",");
-      const nextLine = lines[i+1].split(",");
-      const nextNextLine = lines[i+2].split(",");
-      for (let j = 0; j < SHARED_HEADERS.length; j++) {
-        game[SHARED_HEADERS[j]] = currentLine[j];
+    const courtHeaders = headers.filter((header) => !SHARED_HEADERS.includes(header));
+    for (let i = 1; i < lines.length; i += 3) {
+      const game: { [key: string]: string } = {};
+
+      SHARED_HEADERS.forEach((header) => {
+        const value = lines[i].split(",")[headers.indexOf(header)];
+        game[sharedHeaderMapping[header]] = value;
       }
+      );
+
+      const currentLine = lines[i].split(",");
+      const nextLine = lines[i + 1].split(",");
+      const nextNextLine = lines[i + 2].split(",");
       for (let j = 0; j < courtHeaders.length; j++) {
         const court = courtHeaders[j];
         const homeTeam = currentLine[j];
         const awayTeam = nextLine[j];
         const reffingTeam = nextNextLine[j];
-        const courtGame = {
+        const courtGame: Game = {
           court,
           homeTeam,
           awayTeam,
           reffingTeam,
-          ...game
-        }
+          round: game.round,
+          startTime: game.startTime
+        };
         result.push(courtGame);
       }
     }
@@ -65,10 +76,10 @@ export const Page = async () => {
       </thead>
       <tbody>
         {roundRobinParsed.map((courtSchedule, index) => {
-          return <tr key={`${courtSchedule.court}-${courtSchedule["Round #"]}-${index}`}>
+          return <tr key={`${courtSchedule.court}-${courtSchedule.round}-${index}`}>
             <td>{courtSchedule.court}</td>
-            <td>{courtSchedule["Round #"]}</td>
-            <td>{courtSchedule["Start Time"]}</td>
+            <td>{courtSchedule.round}</td>
+            <td>{courtSchedule.startTime}</td>
             <td>{courtSchedule.homeTeam}</td>
             <td>{courtSchedule.awayTeam}</td>
             <td>{courtSchedule.reffingTeam}</td>
