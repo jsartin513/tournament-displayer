@@ -1,6 +1,7 @@
-import { NextPage } from 'next';
-import React from 'react';
+import { NextPage } from 'next'
+import React from 'react'
 import { Game } from '../../types/game';
+
 import { parseCSV } from '../../utils/parseCSV';
 import RoundRobinTable from '../../components/RoundRobinTable';
 
@@ -16,7 +17,9 @@ const Page: NextPage = async () => {
 
   const roundRobinParsed: Game[] = parseCSV(roundRobinData);
 
-  return <RoundRobinTable games={roundRobinParsed} />;
+  return (
+    <RoundRobinTable games={roundRobinParsed} currentTime={new Date()} />
+  )
 };
 
 export default Page;
