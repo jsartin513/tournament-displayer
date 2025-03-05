@@ -10,7 +10,7 @@ interface RoundRowProps {
 
 const RoundRow: React.FC<RoundRowProps> = ({ round, games, isCurrentRound }) => {
   return (
-    <tr style={{ backgroundColor: isCurrentRound ? 'yellow' : 'transparent' }}>
+    <tr className={isCurrentRound ? styles.currentRound : ''}>
       <td className={styles.tableCell}>{round}</td>
       <td className={styles.tableCell}>{games[0].startTime}</td>
       <td className={styles.tableCell}>

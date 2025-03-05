@@ -18,8 +18,8 @@ const RoundRobinTable: React.FC<RoundRobinTableProps> = ({ games, currentTime })
   }, {} as { [key: string]: Game[] });
 
   return (
-    <div>
-      <h1>Round Robin Data</h1>
+    <div className="container">
+      <h1>Round Robin</h1>
       <table>
         <thead>
           <tr>
