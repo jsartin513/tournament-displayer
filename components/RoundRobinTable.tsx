@@ -40,7 +40,7 @@ const RoundRobinTable: React.FC<RoundRobinTableProps> = ({ games }) => {
                 return (
                   <div key={court} className={styles.gridCell}>
                     {game && game.court && game.homeTeam && game.awayTeam ? (
-                      game.homeTeamScore && game.awayTeamScore && round !== "10" ? (
+                      game.homeTeamScore && game.awayTeamScore? (
                         <>
                           <div>{game.homeTeam} {game.homeTeamScore} - {game.awayTeamScore} {game.awayTeam}</div>
                         </>
