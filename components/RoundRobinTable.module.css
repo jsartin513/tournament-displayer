@@ -1,3 +1,22 @@
 .tableCell {
   padding: 10px;
 }
+
+.gridContainer {
+  display: grid;
+  gap: 10px;
+}
+
+.gridHeader {
+  display: contents;
+}
+
+.gridRow {
+  display: contents;
+}
+
+.gridCell {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
